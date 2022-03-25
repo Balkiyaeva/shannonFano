@@ -105,30 +105,38 @@ public class ShannonFano {
         }
 
         if (mapF.size() == 1){
-            produceBit(mapF, fkeys, true);
+            produceb(mapF, fkeys, true);
         } else {
-            produceBit(mapF, fkeys, true);
+            produceb(mapF, fkeys, true);
             rec(mapF);
         }
 
         if (mapS.size() == 1){
-            produceBit(mapS, skeys, false);
+            produceb(mapS, skeys, false);
         } else {
-            produceBit(mapS, skeys, false);
+            produceb(mapS, skeys, false);
             rec(mapS);
         }
     }
 
-    public void produceBit(Map<Character, Float> map, List<Character> characterList, boolean first){
+    public void produceb(Map<Character, Float> map, List<Character> characterList, boolean first){
         String bit = "";
-        if (!map.isEmpty()) {
-            bit = (first) ? "0" : "1";
+        if (!map.isEmpty()){
+            if (first){
+                bit = "0";
+            } else { bit = "1";}
         }
 
         for (Character c: characterList) {
-            String s = (encode.get(c) == null) ? "" : String.valueOf(encode.get(c));
-            encode.put(c, s + bit);
-            recBits.put(characterList, s + bit);
+            String recBit;
+            if (encode.get(c) == null){
+                recBit = "";
+            } else {
+                recBit = encode.get(c);
+            }
+
+            encode.put(c, recBit + bit);
+            recBits.put(characterList, recBit + bit);
         }
     }
 
