@@ -30,5 +30,7 @@ public class Main {
         //String text = "CERRIAARREEIICCEEAAIIEECCRRRCR";
         shannonFano.algorithm(text);
         System.out.println(shannonFano);
+
+        shannonFano.decode();
     }
 }

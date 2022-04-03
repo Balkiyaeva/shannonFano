@@ -11,10 +11,11 @@ public class ShannonFano {
     private Map<Character, Float> probability = new LinkedHashMap<>();
 
     private Map<List<Character>, Float> recmap = new LinkedHashMap<>();
+    //private Map<List<Character>, Character> fordec = new LinkedHashMap<>();
+
     private Map<List<Character>, String> recBits = new LinkedHashMap<>();
 
     private Map<Character, String> encode = new LinkedHashMap<>();
-
 
     private void prob(){
         int len = originalText.length();
@@ -42,9 +43,9 @@ public class ShannonFano {
         Map<Key, Value> result = new LinkedHashMap<>();
         for (Map.Entry<Key, Value> entry : temp) {
             result.put(entry.getKey(), entry.getValue());
-            System.out.print("'" + entry.getKey() + "': " + entry.getValue() + "; ");
+            //System.out.print("'" + entry.getKey() + "': " + entry.getValue() + "; ");
         }
-        System.out.println();
+        //System.out.println();
 
         return result;
     }
@@ -136,6 +137,7 @@ public class ShannonFano {
             }
 
             encode.put(c, recBit + bit);
+//            fordec.put(characterList, b);
             recBits.put(characterList, recBit + bit);
         }
     }
@@ -168,6 +170,63 @@ public class ShannonFano {
         System.out.println();
 
     }
+
+    public void decode(){
+        StringBuilder compressed = new StringBuilder(getCompressedText(originalText));
+        StringBuilder reversed = new StringBuilder(getCompressedText(originalText));
+
+        reversed.reverse();
+
+        String decoded = "", s = "";
+        //String compressedLoop = "";
+
+        Map<Character, String> encodeSorted;
+
+        encodeSorted = sortByValue(encode);
+
+        for (Character character : reversed.toString().toCharArray()){
+            s = character + s;
+
+            for (Map.Entry<Character, String> map : encodeSorted.entrySet()){
+                if (s.equals(map.getValue())) {
+                    decoded += map.getKey();
+                    //compressedLoop += " " + s ;
+                    s = "";
+                    break;
+                }
+            }
+        }
+        StringBuilder builder = new StringBuilder(decoded);
+        builder.reverse();
+
+        System.out.println(builder);
+        System.out.println();
+        //System.out.println(decoded);
+        System.out.println(originalText);
+//        System.out.println(compressedLoop);
+//        System.out.println(compressed);
+    }
+
+    /*public void recDec(int count, String elBit, List<Character> characterList, Character character){
+        String s = elBit;
+        Character key = character;
+
+        for (List<Character> characters : fordec.keySet()  ){
+            if (characters.size() == count){
+                if (characterList == null && count == 1){
+                    key = characters.get(0);
+                    s = "";
+                }
+                if (characterList == null || (characters.containsAll(characterList))) {
+                    s += String.valueOf(fordec.get(characters));
+                    recDec(count+1, s, characters, key);
+                }
+            }
+        }
+        if (!decode.containsKey(key)){
+            decode.put(key, s);
+        }
+    }*/
 
     public String getCompressedText(String text){
         String compressed = "";
